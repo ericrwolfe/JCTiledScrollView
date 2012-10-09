@@ -363,7 +363,7 @@
 
 - (void)setLevelsOfZoom:(size_t)levelsOfZoom
 {
-  _levelsOfZoom = levelsOfZoom;
+  _levelsOfZoom = levelsOfZoom - (size_t)floor(self.contentScaleFactor/2);
   _scrollView.maximumZoomScale = (float)powf(2.0f, MAX(0.0f, levelsOfZoom));
 }
 
@@ -371,7 +371,7 @@
 {
   if (levelsOfDetail == 1) NSLog(@"Note: Setting levelsOfDetail to 1 causes strange behaviour");
 
-  _levelsOfDetail = levelsOfDetail;
+  _levelsOfDetail = levelsOfDetail - (size_t)floor(self.contentScaleFactor/2);
   [self.tiledView setNumberOfZoomLevels:levelsOfDetail];
 }
 

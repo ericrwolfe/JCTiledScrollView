@@ -52,8 +52,7 @@ static const CGFloat kDefaultTileSize = 256.0f;
 {
   if (self = [super initWithFrame:frame])
   {
-    CGSize scaledTileSize = CGSizeApplyAffineTransform(self.tileSize, CGAffineTransformMakeScale(self.contentScaleFactor, self.contentScaleFactor));
-    self.tiledLayer.tileSize = scaledTileSize;
+    self.tiledLayer.tileSize = self.tileSize;
     self.tiledLayer.levelsOfDetail = 1;
     self.numberOfZoomLevels = 3;
     self.shouldAnnotateRect = NO;
@@ -86,7 +85,7 @@ static const CGFloat kDefaultTileSize = 256.0f;
 - (void)drawRect:(CGRect)rect
 {
   CGContextRef ctx = UIGraphicsGetCurrentContext();
-  CGFloat scale = CGContextGetCTM(ctx).a / self.tiledLayer.contentsScale;
+  CGFloat scale = CGContextGetCTM(ctx).a;
 
   NSInteger col = (NSInteger)((CGRectGetMinX(rect) * scale) / self.tileSize.width);
   NSInteger row = (NSInteger)((CGRectGetMinY(rect) * scale) / self.tileSize.height);
@@ -100,7 +99,7 @@ static const CGFloat kDefaultTileSize = 256.0f;
 // Handy for Debug
 - (void)annotateRect:(CGRect)rect inContext:(CGContextRef)ctx
 {
-  CGFloat scale = CGContextGetCTM(ctx).a / self.tiledLayer.contentsScale;
+  CGFloat scale = CGContextGetCTM(ctx).a;
   CGFloat line_width = 2.0f / scale;
   CGFloat font_size = 16.0f / scale;
 
