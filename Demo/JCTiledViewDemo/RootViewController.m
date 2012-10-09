@@ -52,7 +52,7 @@
   self.scrollView.zoomScale = 1.0f;
 
 #ifdef ANNOTATE_TILES
-  self.scrollView.tiledView.shouldAnnotateRect = YES;
+    //self.scrollView.tiledView.shouldAnnotateRect = YES;
 #endif
   
   // totals 4 sets of tiles across all devices, retina devices will miss out on the first 1x set
