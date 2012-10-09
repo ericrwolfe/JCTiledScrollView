@@ -237,7 +237,13 @@
       [self setMuteAnnotationUpdates:NO];
     });
 
-    [_scrollView setZoomScale:newZoom animated:YES];
+    CGPoint touch = [gestureRecognizer locationInView:self.tiledView];
+      
+    CGFloat newWidth = _scrollView.bounds.size.width/newZoom;
+    CGFloat newHeight = _scrollView.bounds.size.height/newZoom;
+    CGRect newRect = CGRectMake(touch.x - newWidth/2, touch.y - newHeight/2, newWidth, newHeight);
+      
+    [_scrollView zoomToRect:newRect animated:YES];
   }
 
   if ([self.tiledScrollViewDelegate respondsToSelector:@selector(tiledScrollView:didReceiveDoubleTap:)])
