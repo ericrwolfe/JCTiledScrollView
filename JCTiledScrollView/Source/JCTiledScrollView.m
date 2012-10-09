@@ -66,65 +66,27 @@
 
 @synthesize muteAnnotationUpdates = _muteAnnotationUpdates;
 
+@synthesize contentSize = _contentSize;
+
 + (Class)tiledLayerClass
 {
   return [JCTiledView class];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    if ((self = [super initWithCoder:aDecoder])) {
+        [self setupScrollView];
+    }
+    return self;
 }
 
 - (id)initWithFrame:(CGRect)frame contentSize:(CGSize)contentSize
 {
 	if ((self = [super initWithFrame:frame]))
   {
-    self.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
-
-    _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
-    _scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
-    _scrollView.delegate = self;
-    _scrollView.backgroundColor = [UIColor whiteColor];
-    _scrollView.contentSize = contentSize;
-    _scrollView.bouncesZoom = YES;
-    _scrollView.bounces = YES;
-    _scrollView.minimumZoomScale = 1.0;
-
-    self.levelsOfZoom = 2;
-
-    self.zoomsInOnDoubleTap = YES;
-    self.zoomsOutOnTwoFingerTap = YES;
-    self.centerSingleTap = YES;
-
-    CGRect canvas_frame = CGRectMake(0.0f, 0.0f, _scrollView.contentSize.width, _scrollView.contentSize.height);
-    _canvasView = [[UIView alloc] initWithFrame:canvas_frame];
-    _canvasView.userInteractionEnabled = NO;
-
-    _tiledView = [[[[self class] tiledLayerClass] alloc] initWithFrame:canvas_frame];
-    _tiledView.delegate = self;
-
-    [_scrollView addSubview:self.tiledView];
-
-    [self addSubview:_scrollView];
-    [self addSubview:_canvasView];
-
-    _singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapReceived:)];
-    _singleTapGestureRecognizer.numberOfTapsRequired = 1;
-    [_tiledView addGestureRecognizer:_singleTapGestureRecognizer];
-
-    _doubleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapReceived:)];
-    _doubleTapGestureRecognizer.numberOfTapsRequired = 2;
-    [_tiledView addGestureRecognizer:_doubleTapGestureRecognizer];
-
-    [_singleTapGestureRecognizer requireGestureRecognizerToFail:_doubleTapGestureRecognizer];
-
-    _twoFingerTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingerTapReceived:)];
-    _twoFingerTapGestureRecognizer.numberOfTouchesRequired = 2;
-    _twoFingerTapGestureRecognizer.numberOfTapsRequired = 1;
-    [_tiledView addGestureRecognizer:_twoFingerTapGestureRecognizer];
-    
-    _annotations = [[NSMutableSet alloc] init];
-    _visibleAnnotations = [[NSMutableSet alloc] init];
-    _recycledAnnotationViews = [[NSMutableSet alloc] init];
-
-    _muteAnnotationUpdates = NO;
-	}
+      [self setupScrollView];
+      [self setContentSize:contentSize];
+  }
 	return self;
 }
 
@@ -143,6 +105,71 @@
 
 	[super dealloc];
 }
+
+#pragma mark - Setup
+
+- (void) setContentSize:(CGSize)contentSize {
+    _scrollView.contentSize = contentSize;
+
+    CGRect canvas_frame = CGRectMake(0.0f, 0.0f, _scrollView.contentSize.width, _scrollView.contentSize.height);
+
+    _canvasView.frame = canvas_frame;
+    _tiledView.frame = canvas_frame;
+}
+
+- (void) setupScrollView {
+    if (_scrollView) return;
+    
+    self.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
+    
+    _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
+    _scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
+    _scrollView.delegate = self;
+    _scrollView.backgroundColor = [UIColor whiteColor];
+    _scrollView.bouncesZoom = YES;
+    _scrollView.bounces = YES;
+    _scrollView.minimumZoomScale = 1.0;
+    
+    self.levelsOfZoom = 2;
+    
+    self.zoomsInOnDoubleTap = YES;
+    self.zoomsOutOnTwoFingerTap = YES;
+    self.centerSingleTap = YES;
+    
+    _canvasView = [[UIView alloc] initWithFrame:CGRectZero];
+    _canvasView.userInteractionEnabled = NO;
+    
+    _tiledView = [[[[self class] tiledLayerClass] alloc] initWithFrame:CGRectZero];
+    _tiledView.delegate = self;
+    
+    [_scrollView addSubview:self.tiledView];
+    
+    [self addSubview:_scrollView];
+    [self addSubview:_canvasView];
+    
+    _singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapReceived:)];
+    _singleTapGestureRecognizer.numberOfTapsRequired = 1;
+    [_tiledView addGestureRecognizer:_singleTapGestureRecognizer];
+    
+    _doubleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapReceived:)];
+    _doubleTapGestureRecognizer.numberOfTapsRequired = 2;
+    [_tiledView addGestureRecognizer:_doubleTapGestureRecognizer];
+    
+    [_singleTapGestureRecognizer requireGestureRecognizerToFail:_doubleTapGestureRecognizer];
+    
+    _twoFingerTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingerTapReceived:)];
+    _twoFingerTapGestureRecognizer.numberOfTouchesRequired = 2;
+    _twoFingerTapGestureRecognizer.numberOfTapsRequired = 1;
+    [_tiledView addGestureRecognizer:_twoFingerTapGestureRecognizer];
+    
+    _annotations = [[NSMutableSet alloc] init];
+    _visibleAnnotations = [[NSMutableSet alloc] init];
+    _recycledAnnotationViews = [[NSMutableSet alloc] init];
+    
+    _muteAnnotationUpdates = NO;
+
+}
+
 
 #pragma mark - UIScrolViewDelegate
 
