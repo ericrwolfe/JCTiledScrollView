@@ -209,8 +209,16 @@
                                  scrollView.contentSize.height * 0.5 + offsetY);
 }
 
+- (void) adjustMinimumZoomScale:(UIScrollView*)scrollView {
+    if (!CGSizeEqualToSize(_contentSize, CGSizeZero)) {
+        CGFloat ratio = MIN(scrollView.bounds.size.width/_contentSize.width,scrollView.bounds.size.height/_contentSize.height);
+        scrollView.minimumZoomScale = ratio;
+    }
+}
+
 - (void) layoutSubviews {
     [super layoutSubviews];
+    [self adjustMinimumZoomScale:_scrollView];
     [self centerContentInScrollView:_scrollView];
 }
 
