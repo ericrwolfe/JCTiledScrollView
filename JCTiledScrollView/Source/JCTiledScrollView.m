@@ -109,6 +109,7 @@
 #pragma mark - Setup
 
 - (void) setContentSize:(CGSize)contentSize {
+    _contentSize = contentSize;
     _scrollView.contentSize = contentSize;
 
     CGRect canvas_frame = CGRectMake(0.0f, 0.0f, _scrollView.contentSize.width, _scrollView.contentSize.height);
