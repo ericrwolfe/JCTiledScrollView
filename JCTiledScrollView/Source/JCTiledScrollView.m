@@ -379,6 +379,12 @@
   [_scrollView setZoomScale:zoomScale animated:animated];
 }
 
+- (void) zoomToFitAnimated:(BOOL)animated {
+    if (fabs(_scrollView.contentSize.width-self.bounds.size.width)>0.0001&&fabs(_scrollView.contentSize.height-self.bounds.size.height)>0.0001) {
+        [_scrollView zoomToRect:CGRectMake(0, 0, _contentSize.width, _contentSize.height) animated:animated];
+    }
+}
+
 - (void)setLevelsOfZoom:(size_t)levelsOfZoom
 {
   _levelsOfZoom = levelsOfZoom - (size_t)floor([[UIScreen mainScreen] scale]/2);

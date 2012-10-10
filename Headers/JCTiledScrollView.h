@@ -74,6 +74,7 @@
 
 @property (nonatomic, assign) float zoomScale;
 - (void)setZoomScale:(float)zoomScale animated:(BOOL)animated;
+- (void)zoomToFitAnimated:(BOOL)animated;
 
 //Default gesture behvaiour
 @property (nonatomic, assign) BOOL centerSingleTap;
