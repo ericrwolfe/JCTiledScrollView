@@ -125,7 +125,6 @@
     _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
     _scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     _scrollView.delegate = self;
-    _scrollView.backgroundColor = [UIColor whiteColor];
     _scrollView.bouncesZoom = YES;
     _scrollView.bounces = YES;
     _scrollView.minimumZoomScale = 1.0;
