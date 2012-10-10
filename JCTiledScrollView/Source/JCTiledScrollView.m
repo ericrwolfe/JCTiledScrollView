@@ -178,16 +178,9 @@
   return self.tiledView;
 }
 
-- (void)scrollViewDidZoom:(__unused UIScrollView *)scrollView
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView
 {
-    UIView *subView = [scrollView.subviews objectAtIndex:0];
-    
-    CGFloat offsetX = (CGFloat)((scrollView.bounds.size.width > scrollView.contentSize.width) ? (scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5 : 0.0);
-    
-    CGFloat offsetY = (CGFloat)((scrollView.bounds.size.height > scrollView.contentSize.height) ? (scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5 : 0.0);
-    
-    subView.center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX,
-                                 scrollView.contentSize.height * 0.5 + offsetY);
+    [self centerContentInScrollView:scrollView];
     
     if ([self.tiledScrollViewDelegate respondsToSelector:@selector(tiledScrollViewDidZoom:)])
   {
@@ -203,6 +196,22 @@
   {
     [self.tiledScrollViewDelegate tiledScrollViewDidScroll:self];
   }
+}
+
+- (void)centerContentInScrollView:(UIScrollView*)scrollView {
+    UIView *subView = [scrollView.subviews objectAtIndex:0];
+    
+    CGFloat offsetX = (CGFloat)((scrollView.bounds.size.width > scrollView.contentSize.width) ? (scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5 : 0.0);
+    
+    CGFloat offsetY = (CGFloat)((scrollView.bounds.size.height > scrollView.contentSize.height) ? (scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5 : 0.0);
+    
+    subView.center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX,
+                                 scrollView.contentSize.height * 0.5 + offsetY);
+}
+
+- (void) layoutSubviews {
+    [super layoutSubviews];
+    [self centerContentInScrollView:_scrollView];
 }
 
 #pragma mark - 
