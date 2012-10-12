@@ -79,6 +79,7 @@ static const CGFloat kDefaultTileSize = 256.0f;
 
 - (void)setNumberOfZoomLevels:(size_t)levels
 {
+  self.tiledLayer.levelsOfDetail = levels+self.tiledLayer.contentsScale-1;
   self.tiledLayer.levelsOfDetailBias = levels;
 }
 
