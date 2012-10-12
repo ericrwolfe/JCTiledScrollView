@@ -395,9 +395,8 @@
 }
 
 - (void) zoomToFitAnimated:(BOOL)animated {
-    if (fabs(_scrollView.contentSize.width-self.bounds.size.width)>0.0001&&fabs(_scrollView.contentSize.height-self.bounds.size.height)>0.0001) {
-        [_scrollView zoomToRect:CGRectMake(0, 0, _contentSize.width, _contentSize.height) animated:animated];
-    }
+  CGFloat ratio = MIN(_scrollView.bounds.size.width/_contentSize.width,_scrollView.bounds.size.height/_contentSize.height);
+  [self setZoomScale:ratio animated:animated];
 }
 
 - (void)setLevelsOfZoom:(size_t)levelsOfZoom
