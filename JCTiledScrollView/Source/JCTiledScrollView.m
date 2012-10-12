@@ -109,6 +109,8 @@
 #pragma mark - Setup
 
 - (void) setContentSize:(CGSize)contentSize {
+    _scrollView.zoomScale = 1.0;
+
     _contentSize = contentSize;
     _scrollView.contentSize = contentSize;
 
@@ -116,6 +118,11 @@
 
     _canvasView.frame = canvas_frame;
     _tiledView.frame = canvas_frame;
+    
+    [self setNeedsLayout];
+    [_scrollView setNeedsDisplay];
+    [_canvasView setNeedsDisplay];
+    [_tiledView setNeedsDisplay];
 }
 
 - (void) setupScrollView {
